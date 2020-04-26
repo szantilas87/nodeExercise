@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Convert seconds to hours and minutes
+        function secondsToHms(d) {
+            d = Number(d);
+            const h = Math.floor(d / 3600);
+            const m = Math.floor(d % 3600 / 60);
+            const s = Math.floor(d % 3600 % 60);
+
+            const hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+            const mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+            const sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+            return hDisplay + mDisplay + sDisplay;
+        }
+
+        const getData = async () => {
+            const response = await fetch('/api');
+            const res_data = await response.json();
+            const earliest_sunrise = new Date(res_data[0].sunrise)
+            const formatted_time = secondsToHms(res_data[0].day_length)
+            console.log(earliest_sunrise)
+
+            const root = document.createElement('div');
+            const earliest = document.createElement('h2');
+            earliest.textContent =
+                `The day length for the earliest sunrise (${earliest_sunrise}) is : ${formatted_time}`
+            root.append(earliest);
+
+            document.body.append(root)
+        }
+        getData();
+    </script>
+
+</body>
+
+</html>
